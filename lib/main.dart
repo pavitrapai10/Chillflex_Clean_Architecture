@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'presentation/screens/auth/register_screen.dart';
 import 'presentation/screens/movies/login_form.dart';
+import 'presentation/screens/movies/movie_listscreen.dart'; // Import movie screen
 import 'providers/auth_provider.dart';
+import 'providers/movie_provider.dart'; // Import movie provider
 
 void main() {
   HttpOverrides.global = MyHttpOverrides(); // Allow self-signed SSL certificates
@@ -25,7 +27,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthProvider()), // Provide AuthProvider globally
+        ChangeNotifierProvider(create: (context) => AuthProvider()), // ✅ AuthProvider
+        ChangeNotifierProvider(create: (context) => MovieProvider()), // ✅ MovieProvider added
       ],
       child: MaterialApp(
         title: "Movie App",

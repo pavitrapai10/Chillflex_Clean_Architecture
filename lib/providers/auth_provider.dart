@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../data/datasources/api.dart'; // Ensure this API file exists
+import '../data/datasources/api.dart'; 
+import '../presentation/screens/auth/login.dart';
 
 class AuthProvider with ChangeNotifier {
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
@@ -50,39 +51,64 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // 4️⃣ **User Registration**
-  Future<void> register(BuildContext context, String username, String password) async {
-    _isLoading = true;
-    _errorMessage = "";
+ Future<void> register(BuildContext context, String username, String password) async {
+  _isLoading = true;
+  _errorMessage = "";
+  notifyListeners();
+
+  try {
+    final response = await ApiService.registerUser(username, password);
+    
+    // ✅ Check if API response contains a message
+    if (response.containsKey("message")) {
+      _errorMessage = response["message"];
+    } else {
+      _errorMessage = "Unexpected error occurred!";
+    }
+
+    // ✅ Show the API message in a Snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(_errorMessage),
+        backgroundColor: response['statusCode'] == 201 ? Colors.green : Colors.red, 
+      ),
+    );
+
+    // ✅ If registration is successful, navigate to Login screen
+    if (response['statusCode'] == 201) {
+      Navigator.pop(context); // Go back to Login Screen
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Registration error: ${e.toString()}"),
+        backgroundColor: Colors.red,
+      ),
+    );
+  } finally {
+    _isLoading = false;
     notifyListeners();
-
-    try {
-      bool success = await registerUser(username, password);
-      if (success) {
-        Navigator.pop(context); // Go back to login screen after successful registration
-      }
-    } catch (e) {
-      _errorMessage = e.toString().replaceAll("Exception: ", "");
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
   }
+}
 
-  // 5️ **User Registration API Call**
-  Future<bool> registerUser(String username, String password) async {
-    try {
-      final response = await ApiService.registerUser(username, password);
 
-      if (response.containsKey("message") && response["message"] == "Registration successful") {
-        return true; // Registration succeeded
-      } else {
-        throw Exception(response["message"] ?? "Registration failed");
-      }
-    } catch (e) {
-      throw Exception("Registration error: ${e.toString()}");
+
+Future<bool> registerUser(String username, String password) async {
+  try {
+    final response = await ApiService.registerUser(username, password);
+
+    if (response["success"] == true) {
+      print("Registration was successful!");
+      return true;
+    } else {
+      throw Exception(response["message"] ?? "Registration failed");
     }
+  } catch (e) {
+    throw Exception("Registration error: ${e.toString()}");
   }
+}
+
+
 
   // 6️ **User Login**
   Future<bool> loginUser(String username, String password) async {

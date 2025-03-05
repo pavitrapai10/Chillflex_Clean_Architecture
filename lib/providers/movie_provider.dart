@@ -3,7 +3,7 @@ import '../domain/entities/movie.dart';
 import '../data/repositories/movie_repository_impl.dart';
 
 class MovieProvider extends ChangeNotifier {
-  final MovieRepository _movieRepository = MovieRepository();
+  final MovieRepositoryImpl _movieRepository = MovieRepositoryImpl();
 
   List<Movie> _movies = [];
   List<Movie> get movies => _movies;
@@ -19,34 +19,38 @@ class MovieProvider extends ChangeNotifier {
   }
 
   Future<void> fetchMovies() async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      _movies = await _movieRepository.fetchMovies();
-      _errorMessage = null;
-    } catch (e) {
-      _errorMessage = "Failed to load movies";
-    }
-    _isLoading = false;
-    notifyListeners();
+  _isLoading = true;
+  notifyListeners();
+
+  try {
+    _movies = await _movieRepository.fetchMovies();
+    _errorMessage = null; // ✅ Clear error message if successful
+  } catch (e) {
+    _errorMessage = e.toString(); // ✅ Display actual API error message
+    print("Error fetching movies: $_errorMessage");
   }
 
-  Future<void> addMovie(Movie movie) async {
+  _isLoading = false;
+  notifyListeners();
+}
+
+
+  Future<void> addMovie(String title, String genre, String releaseDate) async {
     try {
-      await _movieRepository.addMovie(movie);
-      _movies.add(movie);
+      await _movieRepository.addMovie(title, genre, releaseDate);
+      _movies.add(Movie(id: _movies.length + 1, title: title, genre: genre, releaseDate: releaseDate));
       notifyListeners();
     } catch (e) {
       _errorMessage = "Failed to add movie";
     }
   }
 
-  Future<void> updateMovie(Movie updatedMovie) async {
+  Future<void> updateMovie(int id, String title, String genre, String releaseDate) async {
     try {
-      await _movieRepository.updateMovie(updatedMovie);
-      int index = _movies.indexWhere((m) => m.id == updatedMovie.id);
+      await _movieRepository.updateMovie(id, title, genre, releaseDate);
+      int index = _movies.indexWhere((m) => m.id == id);
       if (index != -1) {
-        _movies[index] = updatedMovie;
+        _movies[index] = Movie(id: id, title: title, genre: genre, releaseDate: releaseDate);
       }
       notifyListeners();
     } catch (e) {

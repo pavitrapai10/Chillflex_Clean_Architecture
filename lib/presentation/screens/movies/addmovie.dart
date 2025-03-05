@@ -39,7 +39,7 @@ class _AddMovieScreenState extends State<AddMovieScreen> {
     }
   }
 
-  void _addMovie() async {
+ void _addMovie() async {
   if (_formKey.currentState!.validate()) {
     bool success = await ApiService.addMovie(
       _titleController.text.trim(),
@@ -56,8 +56,8 @@ class _AddMovieScreenState extends State<AddMovieScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Close dialog
-                Navigator.pop(context, true); // Close add movie screen & refresh
+                Navigator.pop(context); // Close the dialog
+                Navigator.pop(context, true); // ✅ Pass true when closing AddMovieScreen
               },
               child: Text("OK"),
             ),
@@ -144,6 +144,7 @@ class _AddMovieScreenState extends State<AddMovieScreen> {
                   ),
                   child: Text("Add Movie", style: TextStyle(fontSize: 18, color: Colors.white)),
                   onPressed: _addMovie,
+
                 ),
               ),
             ],

@@ -1,29 +1,20 @@
-import 'package:api/data/datasources/api.dart';
-import 'package:api/domain/entities/movie.dart';
-import 'package:api/domain/repositories/movie_repository.dart';
+import '../../domain/entities/movie.dart';
+import '../datasources/api.dart';
 
-class MovieRepositoryImpl implements MovieRepository {
-  final ApiService apiService;
-
-  MovieRepositoryImpl({required this.apiService});
-
-  @override
-  Future<List<Movie>> getMovies() async {
-    return await ApiService.fetchMovies();
+class MovieRepositoryImpl {
+  Future<List<Movie>> fetchMovies() async {
+    return await ApiService.fetchMovies(); // ✅ Accessing static method correctly
   }
 
-  @override
-  Future<void> addMovie(Movie movie) async {
-    await ApiService.addMovie(movie.title, movie.overview); 
+  Future<void> addMovie(String title, String genre, String releaseDate) async {
+    await ApiService.addMovie(title, genre, releaseDate); // ✅ Fix
   }
 
-  @override
-  Future<void> updateMovie(Movie movie) async {
-    await ApiService.updateMovie(movie);
+  Future<void> updateMovie(int id, String title, String genre, String releaseDate) async {
+    await ApiService.updateMovie(id, title, genre, releaseDate); // ✅ Fix
   }
 
-  @override
   Future<void> deleteMovie(int id) async {
-    await ApiService.deleteMovie(id);
+    await ApiService.deleteMovie(id); // ✅ Fix
   }
 }
