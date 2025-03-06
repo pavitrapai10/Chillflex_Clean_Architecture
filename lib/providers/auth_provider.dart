@@ -59,14 +59,14 @@ class AuthProvider with ChangeNotifier {
   try {
     final response = await ApiService.registerUser(username, password);
     
-    // ✅ Check if API response contains a message
+    // Check if API response contains a message
     if (response.containsKey("message")) {
       _errorMessage = response["message"];
     } else {
       _errorMessage = "Unexpected error occurred!";
     }
 
-    // ✅ Show the API message in a Snackbar
+    // Show the API message in a Snackbar
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(_errorMessage),
@@ -74,7 +74,7 @@ class AuthProvider with ChangeNotifier {
       ),
     );
 
-    // ✅ If registration is successful, navigate to Login screen
+    // If registration is successful, navigate to Login screen
     if (response['statusCode'] == 201) {
       Navigator.pop(context); // Go back to Login Screen
     }

@@ -5,7 +5,7 @@ import '../../domain/entities/movie.dart';
 import '../../data/models/movie_dto.dart';
 
 class ApiService {
-  static const String baseUrl = "https://192.168.1.7:7173/api";
+  static const String baseUrl = "https://192.168.1.190:7173/api";
   static final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   // Get the stored auth token
@@ -25,7 +25,7 @@ class ApiService {
     print("🔹 Registration API Response Status Code: ${response.statusCode}");
     print("🔹 Registration API Response Body: ${response.body}");
 
-    // ✅ Check if registration is successful (200 or 201)
+    // Check if registration is successful (200 or 201)
     if (response.statusCode == 200 || response.statusCode == 201) {
       return {"success": true, "message": "Registration successful"};
     }
@@ -55,7 +55,7 @@ class ApiService {
     }
   }
 
-  // ✅ Fetch Movies (GET)
+  //  Fetch Movies (GET)
   static Future<List<Movie>> fetchMovies() async {
   try {
     String? token = await getToken();
@@ -72,7 +72,7 @@ class ApiService {
     if (response.statusCode == 200) {
       List<dynamic> jsonData = jsonDecode(response.body);
 
-      // 🛠 Ensure parsing is correct
+      //  Ensure parsing is correct
       print("Parsed Movies List: $jsonData");
 
       List<Movie> movies = jsonData.map((json) {
@@ -82,7 +82,7 @@ class ApiService {
 
       return movies;
     } else {
-      // 🛠 Handle backend error messages dynamically
+      //  Handle backend error messages dynamically
       Map<String, dynamic> errorResponse = jsonDecode(response.body);
       throw Exception(errorResponse['message'] ?? "Failed to load movies: ${response.statusCode}");
     }
@@ -125,7 +125,7 @@ class ApiService {
 }
 
 
-  // ✅ Update Movie (PUT)
+  // Update Movie (PUT)
  static Future<bool> updateMovie(int id, String title, String genre, String releaseDate) async {
   try {
     String? token = await getToken();
@@ -160,7 +160,7 @@ class ApiService {
 }
 
 
-  // ✅ Delete a Movie (DELETE)
+  //  Delete a Movie (DELETE)
   static Future<bool> deleteMovie(int id) async {
     try {
       final token = await getToken();

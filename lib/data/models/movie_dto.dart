@@ -15,16 +15,16 @@ class MovieDTO {
     String formattedDate;
     try {
       DateTime parsedDate = DateTime.parse(rawDate);
-      formattedDate = DateFormat('d MMM yyyy').format(parsedDate); // ✅ "3 Feb 2025"
+      formattedDate = DateFormat('d MMM yyyy').format(parsedDate); 
     } catch (e) {
-      formattedDate = "N/A"; // Fallback for invalid dates
+      formattedDate = "N/A"; 
     }
 
     return MovieDTO(
       id: json['id'],
       title: json['title'],
       genre: json['genre'],
-      releaseDate: formattedDate, // ✅ Store formatted date
+      releaseDate: formattedDate,
     );
   }
 
@@ -33,7 +33,7 @@ class MovieDTO {
       'id': id,
       'title': title,
       'genre': genre,
-      'release_date': releaseDate, // Ensure correct format
+      'release_date': releaseDate, 
     };
   }
 }

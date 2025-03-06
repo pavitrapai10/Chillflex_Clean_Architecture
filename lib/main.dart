@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'presentation/screens/auth/register_screen.dart';
-import 'presentation/screens/movies/login_form.dart';
-import 'presentation/screens/movies/movie_listscreen.dart'; // Import movie screen
 import 'providers/auth_provider.dart';
 import 'providers/movie_provider.dart'; // Import movie provider
 
@@ -27,8 +25,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthProvider()), // ✅ AuthProvider
-        ChangeNotifierProvider(create: (context) => MovieProvider()), // ✅ MovieProvider added
+        ChangeNotifierProvider(create: (context) => AuthProvider()), //  AuthProvider
+        ChangeNotifierProvider(create: (context) => MovieProvider()), //  MovieProvider added
       ],
       child: MaterialApp(
         title: "Movie App",
@@ -37,7 +35,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.pink,
           scaffoldBackgroundColor: Colors.white,
         ),
-        home: RegisterScreen(), // Change to LoginScreen() if needed
+        home: RegisterScreen(),
       ),
     );
   }
